@@ -1,8 +1,11 @@
 import sqlite3
 import jsonify
+import requests
+import datetime
 
 def create_db():
     create_stations_db()
+    fill_stations_db()
     create_users_db()
     create_orders_db()
     create_contracts_db()
@@ -31,13 +34,34 @@ def create_stations_db():
     cursor.execute(
         '''
         CREATE TABLE IF NOT EXISTS Stations (
-        StationId   INTEGER PRIMARY KEY AUTOINCREMENT
-                            UNIQUE
-                            NOT NULL,
-        StationName TEXT    NOT NULL
-        );  
+            StationId   TEXT NOT NULL,
+            StationName TEXT NOT NULL
+        );
         '''
     )
+    conn.commit()
+    conn.close()
+
+def fill_stations_db():
+    conn = sqlite3.connect('market.db')
+    cursor = conn.cursor()
+    response = requests.get('https://gbfs.lyft.com/gbfs/2.3/bkn/en/station_information.json')
+    
+    # Check if the request was successful
+    if response.status_code == 200:
+        data = response.json()
+
+        #print(data)
+
+        vals = []
+        for i in data['data']['stations']:
+            dict = i
+            station_id = dict['station_id']
+            station_name = dict['name']
+            val = [station_id, station_name]
+            vals.append(val)
+
+    cursor.executemany("INSERT INTO Stations (StationId, StationName) VALUES (?, ?)", vals)    
     conn.commit()
     conn.close()
 
@@ -51,7 +75,7 @@ def create_orders_db():
             OrderId          INTEGER UNIQUE
                                     PRIMARY KEY AUTOINCREMENT
                                     NOT NULL,
-            StationId        INTEGER NOT NULL
+            StationId        TEXT NOT NULL
                                     REFERENCES Stations (StationId),
             StartTime        NUMERIC,
             EndTime          NUMERIC,
@@ -85,9 +109,6 @@ def create_contracts_db():
     )
     conn.commit()
     conn.close()
-
-
-
 
 def create_station_data_db():
     conn = sqlite3.connect('market.db')
@@ -143,7 +164,3 @@ def get_stations():
         
     return station_list
     
-
-
-# Call the function to create the database
-#create_db()
