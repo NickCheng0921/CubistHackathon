@@ -256,9 +256,7 @@ def get_pricing():
     return jsonify(station_list)
 
 
-
-
 if __name__ == '__main__':
     db_funcs.create_db()
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
