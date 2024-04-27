@@ -1,31 +1,33 @@
 from flask import Flask, request, jsonify
 import sqlite3
 import database as db_funcs
+import requests
 
 app = Flask(__name__)
 
 
-# Function to connect to the SQLite database
-def connect_db():
-    conn = sqlite3.connect('market.db')
-    return conn
-
 # Route to create a new user
-@app.route('/adduser', methods=['POST'])
-def add_user():
-    conn = connect_db()
-    cursor = conn.cursor()
+@app.route('/assets', methods=['GET'])
+def get_assets():
+    response = requests.get('localhost:5000')
+    
+    # Check if the request was successful
+    if response.status_code == 200:
+        data = response.json()
 
-    data = request.form
+        vals = []
+        for i in data:
+            dict = i
 
-    money = data.get('accountMoney')
-    firstName = data.get('firstName')
-    lastName = data.get('lastName')
-
-    # Insert data into the database
-    cursor.execute("INSERT INTO users (AccountMoney, FirstName, LastName) VALUES (?, ?, ?)", (money, firstName, lastName))
-    conn.commit()
-    conn.close()
+            station_name = dict['stationName']
+            #print(i['last_reported'])
+            #time = dict['last_reported']
+            #bikes = dict['num_bikes_available']
+            #docks_available = dict['num_docks_available']
+            station_id = dict['station_id']
+            station_name = dict['name']
+            val = [station_id, station_name]
+            vals.append(val)
     
     return jsonify({'message': 'User created successfully'}), 201
 
@@ -234,7 +236,26 @@ def add_station():
 
     return jsonify("Added Station")
 
+@app.route('/addstationsandid', methods = ['POST'])
+def add_stations_with_ids():
+    conn = sqlite3.connect('market.db')
+    cursor = conn.cursor()
+    
+    data = request.form
+    stationName = data.get('stationName')
 
+    print(stationName)
+
+    # Insert the station into the database
+    cursor.execute("INSERT INTO Stations (stationName) VALUES (?)", (stationName,))
+    
+    conn.commit()
+    conn.close()
+
+    return jsonify("Added Station")
+
+
+#
 #@app.route('/get_pricing', methods=['GET'])
 def get_pricing():
     conn = connect_db()
@@ -255,7 +276,8 @@ def get_pricing():
     return jsonify(station_list)
 
 
+
 if __name__ == '__main__':
     db_funcs.create_db()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=4000, debug=True)
 
