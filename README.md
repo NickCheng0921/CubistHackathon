@@ -128,3 +128,10 @@ Response
 
 201 on success
 
+
+
+## Next Steps 
+1. Work with Amercian-style option contracts
+2. Differ between electric and manual model
+3. Create a grouping function to determine wheter or not a group is pulling the bikes from a station vs. an individual
+   
