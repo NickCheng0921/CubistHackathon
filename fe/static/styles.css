@@ -1,0 +1,17 @@
+/* styles.css */
+.container {
+    display: flex;
+	flex-direction: row;
+}
+
+.element2 {
+	margin: 0.5em;
+	margin-left: 3em;
+	margin-top: 0em;
+}
+
+.scrollable-div {
+	overflow: scroll;
+	height: 100%;
+	width: 100%;
+}
