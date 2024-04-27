@@ -87,7 +87,7 @@ def update_user_money():
     
     return jsonify("Updated Account Balance")
 
-
+# Route to add an order 
 @app.route('/addorders', methods=['POST'])
 def add_orders():
     conn = connect_db()
@@ -111,7 +111,7 @@ def add_orders():
     
     return jsonify({'message': 'Order created successfully'}), 201
 
-
+# Route that returns all orders
 @app.route('/orders', methods=['GET'])
 def get_orders():
     conn = connect_db()
@@ -138,7 +138,7 @@ def get_orders():
     
     return jsonify(order_list)
 
-
+# Route that adds a contract, which is a users purchase
 @app.route('/addcontract', methods=['POST'])
 def add_contracts():
     conn = connect_db()
@@ -156,6 +156,7 @@ def add_contracts():
     
     return jsonify({'message': 'Contract created successfully'}), 201
 
+# Route that returns all contracts
 @app.route('/contracts', methods=['GET'])
 def get_contracts():
     conn = connect_db()
@@ -179,6 +180,7 @@ def get_contracts():
     
     return jsonify(contract_list)
 
+# Route that returns all live contracts (Have not expired yet)
 @app.route('/livecontracts', methods=['GET'])
 def get_live_contracts():
     conn = connect_db()
@@ -213,10 +215,12 @@ def get_live_contracts():
     
     return jsonify(contract_list)
 
+# Route that returns all stations
 @app.route('/stations', methods=['GET'])
 def get_stations():
     return jsonify(db_funcs.get_stations())
 
+# Route to add a station
 @app.route('/addstation', methods = ['POST'])
 def add_station():
     conn = sqlite3.connect('market.db')
@@ -235,7 +239,7 @@ def add_station():
 
     return jsonify("Added Station")
 
-
+# Route to get all pricings at a given time
 @app.route('/orderprices', methods=['GET'])
 def get_orderprices():
     conn = connect_db()

@@ -6,7 +6,7 @@ import requests
 app = Flask(__name__)
 
 
-# Route to create a new user
+# Route for the front end to get all possible pricings.
 @app.route('/assets', methods=['GET'])
 def get_assets():
     response = requests.get('http://127.0.0.1:5000/orderprices')
@@ -16,7 +16,7 @@ def get_assets():
         #print(response.json)
         return response.json()
 
-
+# Route for the front end to purchase a pricing.
 @app.route('/addcontract', methods=['POST'])
 def add_contracts():
     data = request.form
