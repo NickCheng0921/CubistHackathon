@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import sqlite3
 import database as db_funcs
+import datetime
 
 app = Flask(__name__)
 
@@ -108,7 +109,7 @@ def add_orders():
     conn.commit()
     conn.close()
     
-    return jsonify({'message': 'User created successfully'}), 201
+    return jsonify({'message': 'Order created successfully'}), 201
 
 
 @app.route('/orders', methods=['GET'])
@@ -153,7 +154,7 @@ def add_contracts():
     conn.commit()
     conn.close()
     
-    return jsonify({'message': 'User created successfully'}), 201
+    return jsonify({'message': 'Contract created successfully'}), 201
 
 @app.route('/contracts', methods=['GET'])
 def get_contracts():
@@ -235,24 +236,31 @@ def add_station():
     return jsonify("Added Station")
 
 
-#@app.route('/get_pricing', methods=['GET'])
-def get_pricing():
+@app.route('/orderprices', methods=['GET'])
+def get_orderprices():
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Stations")
-    station_list = cursor.fetchall()
+    now = datetime.datetime.now()
+    before = datetime.timedelta(minutes = -15)
 
-    data = request.json
+    cursor.execute(f'SELECT * FROM ORDERS')# WHERE ORDERS.StartTime > {before} AND ORDERS.StartTime < {now}')
+    order_list = cursor.fetchall()
     
-    station_list = []
-    for station in station_list:
-        station_dict = {
-            'id': station[0],
-            'station_name': station[1],
+    orders = []
+    for order in order_list:
+        order_dict = {
+            'order_id': order[0],
+            'station_id': order[1],
+            'start_time':order[2],
+            'end_time':order[3],
+            'start_bike_count':order[4],
+            'end_bike_count':order[5],
+            'payout_multiple':order[6],
+            'is_buy':order[7]
         }
-        station_list.append(station_dict)
+        orders.append(order_dict)
     
-    return jsonify(station_list)
+    return jsonify(orders)
 
 
 if __name__ == '__main__':
