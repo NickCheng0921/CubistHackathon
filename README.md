@@ -17,7 +17,7 @@ Since the Skellam distribution only uses historical data, we adjust the $\lambda
 
 In order to calculate payout factors we simply use the expected value of the contract and set it so that it is slightly positive EV for us and slightly negative for the users using our confidence intervals. For instance if the user predicts $x$ bikes 1.5 hours from now and we calculate that the actual number of bike will be less than that with probability 0.9, since the user has probability 0.1 of winning we would make the payout $0.9\cdot(\frac{1}{0.1})=9$ to make sure we have a slight edge. If the user had a bigger probability of winning like 0.25 the payout would be $0.9\cdot(\frac{1}{0.25})=3.6$.
 
-# Client facing endpoints
+# Backend endpoints
 
 ## Add User
 
