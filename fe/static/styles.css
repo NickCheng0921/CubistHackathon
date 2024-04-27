@@ -4,14 +4,8 @@
 	flex-direction: row;
 }
 
-.element2 {
-	margin: 0.5em;
-	margin-left: 3em;
-	margin-top: 0em;
-}
-
-.scrollable-div {
-	overflow: scroll;
-	height: 100%;
-	width: 100%;
+.title {
+	background-color: #76A923;
+	color: white;
+	margin-top: 0;
 }
