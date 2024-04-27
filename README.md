@@ -3,6 +3,10 @@ For the Cubist Hackathon groups were given a set of NYC-based datasets to work w
 
 Suite of endpoints to simulate a brokerage on number of citibikes in NYC.
 
+A user places a bet predicting an amount of citibikes to be present at specific dock at a future time. If this bet is higher than our markets predicted output, they will profit if the citibikes at the endtime are equal to or greater than the amount they predicted. The opposite occurs if they guess under our markets predicted price. Depending on the difference in predictions, the user gets a multiplier on the money they placed onto the bet.
+
+
+
 ## Computing Confidence Intervals
 
 In order to predict the number of bikes at a given station we create two distinct models whose combined value is the number of bikes in a station. The first model uses a Poisson distribution to calculate the given probability. However, this model may not accurately reflect short-term behaviors that may impact the current number of bikes present (i.e sporting events, emergencies, etc). To combat this we've created a model that creates an exponential moving average(ema) over the last x timesteps. The ema value and Poisson value are joined through a linear combination to construct our final prediction. 
